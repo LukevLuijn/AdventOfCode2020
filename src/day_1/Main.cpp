@@ -19,10 +19,8 @@ bool readFile(std::string filePath, std::vector<std::string> &lines)
     }
 
     while (std::getline(thisFile, line))
-    {
         lines.emplace_back(line);
-    }
-
+    
     thisFile.close();
     return true;
 }
@@ -36,15 +34,12 @@ bool parseInput(std::vector<std::string> lines, std::vector<unsigned short> &val
     for (std::string line : lines)
     {
         int value = std::stoi(line);
-        if (value >= minValue && value <= maxValue)
+        if (value < minValue || value > maxValue)
         {
-            values.emplace_back(value);
+            std::cout << "[ERROR]\tconversion error; value out of bounds" << std::endl;
+            return false;            
         }
-        else
-        {
-            std::cout << "[ERROR]\tconversion error value is greater than " << maxValue << " or smaller than " << minValue << std::endl;
-            return false;
-        }
+        values.emplace_back(value);
     }
     return true;
 }
@@ -55,13 +50,8 @@ int findSolution_first(std::vector<unsigned short> values)
     {
         for (std::size_t j = i; j < values.size(); j++)
         {
-            unsigned short sum = values.at(i) + values.at(j);
-
-            if (sum == 2020)
-            {
-                std::cout << "[" << i << ", " << j << "] - " << values.at(i) << ", " << values.at(j) << std::endl;
+            if (values.at(i) + values.at(j) == 2020)
                 return values.at(i) * values.at(j);
-            }
         }
     }
     std::cout << "[ERROR]\tsolution not found" << std::endl;
@@ -85,7 +75,7 @@ int findSolution_second(std::vector<unsigned short> values)
     return -1;
 }
 
-int main(int argc, char **argv)
+int main(void)
 {
     std::string filePath = "puzzleInput.txt";
 
@@ -97,7 +87,12 @@ int main(int argc, char **argv)
     if (!parseInput(lines, values))
         return EXIT_FAILURE;
 
-    // int solution = findSolution_first(values);
-    int solution = findSolution_second(values);
-    std::cout << "solution: " << solution << std::endl;
+    int firstSolution = findSolution_first(values);
+    int secondSolution = findSolution_second(values);
+
+    if (firstSolution == -1 || secondSolution == -1)
+        return EXIT_FAILURE;
+
+    std::cout << "solutions:\n" << firstSolution <<  "\n" << secondSolution << std::endl;
+    return EXIT_SUCCESS;
 }
