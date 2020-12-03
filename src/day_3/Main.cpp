@@ -26,7 +26,7 @@ bool readFile(std::string filePath, std::vector<std::string> &lines)
 unsigned short countTrees(std::vector<std::string> lines, unsigned short rightSteps, unsigned short downSteps)
 {
     unsigned short
-        lineLength = lines.at(0).length(),
+        lineLength = (unsigned short)lines.at(0).length(),
         treeCounter = 0,
         x = 0;
 
@@ -37,9 +37,9 @@ unsigned short countTrees(std::vector<std::string> lines, unsigned short rightSt
         if (lines.at(y)[x] == tree)
             treeCounter++;
 
-        x += rightSteps;
+        x = (unsigned short)(x + rightSteps);
         if (lineLength <= x)
-            x = x - lineLength;
+            x = (unsigned short)(x - lineLength);
     }
 
     return treeCounter;
@@ -61,17 +61,8 @@ unsigned long checkSolutionTwo(std::vector<std::string> lines)
             countTrees(lines, 1, 2)};
 
     unsigned long multi = 1;
-
-    std::cout << "val: ";
-
     for (unsigned short val : amountOfTrees)
-    {
-        std::cout << ", " << val;
         multi *= val;
-    }
-
-    std::cout << std::endl;
-
     return multi;
 }
 
