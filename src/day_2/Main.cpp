@@ -87,19 +87,8 @@ unsigned short checkSolutionTwo(std::vector<std::string> lines)
         bool posOne = values.code[values.min-1] == values.key,
              posTwo = values.code[values.max-1] == values.key;
 
-        
-
         if ((posOne || posTwo) && !(posOne && posTwo))
-        {
-            std::cout << "YES\t";
             counter++;
-        }
-        else 
-        {
-            std::cout << "NO\t";
-        }
-
-        std::cout << values.key << ", " << values.min << ", " << values.max << ":\t" << values.code[values.min-1] << ", " << values.code[values.max-1] << " -> " << values.code << "\n";
     }
     return counter;
 }
