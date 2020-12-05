@@ -85,7 +85,6 @@ unsigned short checkSolutionTwo(std::vector<std::string> lines)
     return 0;
 }
 
-
 int main(void)
 {
     std::string filePath = "puzzleInput.txt";
