@@ -38,12 +38,12 @@ unsigned short getLocation(std::string line, unsigned short min, unsigned short 
     for (std::size_t i = 0; i < line.length() - 1; i++)
     {
         if (line[i] == lower) // minnus half of the difference
-            max -= std::ceil((max - min) / 2);
+            max = (unsigned short)(max - std::ceil((max - min) / 2));
 
         if (line[i] == upper) // plus half of the difference
-            min += std::ceil((max - min) / 2);
+            min = (unsigned short)(min + std::ceil((max - min) / 2));
     }
-    return (line[line.length() - 1] == lower) ? min : max - 1;
+    return (line[line.length() - 1] == lower) ? min : (unsigned short)(max - 1);
 }
 
 Seat getSeatLocation(std::string line)
@@ -63,7 +63,7 @@ unsigned short checkSolutionOne(std::vector<std::string> lines)
     for (std::string line : lines)
     {
         Seat seat = getSeatLocation(line);
-        unsigned short seatID = seat.row * 8 + seat.col;
+        unsigned short seatID = (unsigned short)(seat.row * 8 + seat.col);
         highestID = (seatID > highestID) ? seatID : highestID;
     }
     return highestID;
@@ -81,9 +81,10 @@ unsigned short checkSolutionTwo(std::vector<std::string> lines)
 
     for (std::size_t i = 1; i < seatNumbers.size() - 1; i++)
         if (seatNumbers.at(i - 1) == seatNumbers.at(i) - 2)
-            return seatNumbers.at(i) -1;
+            return (unsigned short)(seatNumbers.at(i) -1);
     return 0;
 }
+
 
 int main(void)
 {
