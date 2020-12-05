@@ -3,6 +3,9 @@
 #include <math.h>
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <functional>
+#include <array>
 
 struct Seat
 {
@@ -40,23 +43,18 @@ unsigned short getLocation(std::string line, unsigned short min, unsigned short 
         if (line[i] == upper) // plus half of the difference
             min += std::ceil((max - min) / 2);
     }
-    return (line[line.length() - 1] == lower) ? min : max-1;
+    return (line[line.length() - 1] == lower) ? min : max - 1;
 }
 
 Seat getSeatLocation(std::string line)
 {
     std::string rowLine = line.substr(0, line.length() - 3);
     std::string colLine = line.substr(line.length() - 3, 3);
-    
-    Seat seat = {0,0};
+
+    Seat seat = {0, 0};
     seat.row = getLocation(rowLine, 0, 128, 'B', 'F');
     seat.col = getLocation(colLine, 0, 8, 'R', 'L');
     return seat;
-}
-
-void printSeat(Seat seat)
-{
-    std::cout << "Seat:\t" << "Row:" << seat.row << "\t" << "Col:" << seat.col << std::endl;
 }
 
 unsigned short checkSolutionOne(std::vector<std::string> lines)
@@ -71,6 +69,22 @@ unsigned short checkSolutionOne(std::vector<std::string> lines)
     return highestID;
 }
 
+unsigned short checkSolutionTwo(std::vector<std::string> lines)
+{
+    std::vector<unsigned short> seatNumbers;
+    for (std::string line : lines)
+    {
+        Seat seat = getSeatLocation(line);
+        seatNumbers.emplace_back(seat.row * 8 + seat.col);
+    }
+    std::sort(seatNumbers.begin(), seatNumbers.end());
+
+    for (std::size_t i = 1; i < seatNumbers.size() - 1; i++)
+        if (seatNumbers.at(i - 1) == seatNumbers.at(i) - 2)
+            return seatNumbers.at(i) -1;
+    return 0;
+}
+
 int main(void)
 {
     std::string filePath = "puzzleInput.txt";
@@ -80,10 +94,8 @@ int main(void)
     if (!readFile(filePath, lines))
         return EXIT_FAILURE;
 
-
     std::cout << "1. highest seatID: " << checkSolutionOne(lines) << std::endl;
-    // std::cout << "2. valid passports: " << checkSolutionTwo(lines) << std::endl;
-
+    std::cout << "2. claimed seatID: " << checkSolutionTwo(lines) << std::endl;
 
     return EXIT_SUCCESS;
 }
